@@ -32,14 +32,15 @@ class TranscriberApp:
         self.tray_icon.set_title("Transcritor (Gravando)")
 
         while self.is_recording:
-            print("Gravando trecho...")
             audio_data = self.recorder.record_chunk()
 
             if not self.is_recording:
                 break
 
-            print("Transcrevendo trecho...")
-            self.transcriber.transcribe_audio(audio_data)
+            # Passa os dados de áudio diretamente, sem usar um ficheiro
+            if audio_data is not None:
+                print("Transcrevendo trecho...")
+                self.transcriber.transcribe_audio(audio_data)
 
         print("Loop de gravação finalizado.")
 
@@ -47,9 +48,11 @@ class TranscriberApp:
         """Encerra a aplicação de forma limpa."""
         print("Fechando a aplicação...")
         self.is_recording = False
+        # A função cleanup não é mais necessária, mas mantemo-la por uma questão de estrutura
         self.recorder.cleanup()
         self.tray_icon.stop()
 
     def run(self):
         """Inicia a aplicação."""
         self.tray_icon.run()
+
